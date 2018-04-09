@@ -9,6 +9,7 @@ namespace InfoSearch {
         static void Main(string[] args) {
             Menu menu = new Menu();
             menu.Init();
+            Console.WriteLine("test");
         }
     }
 }
