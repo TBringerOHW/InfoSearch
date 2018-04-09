@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InfoSearch {
-    class Parser {
+namespace InfoSearch
+{
+    class Parser
+    {
 
         int[,] matrix = new int[10, 10];
         List<string> links = new List<string>();
