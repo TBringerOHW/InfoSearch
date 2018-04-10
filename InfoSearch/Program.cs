@@ -24,7 +24,14 @@ namespace InfoSearch {
             String fileName = rootLink.Substring(index + 1) + ".txt";
             fileName = fileName.Substring(fileName.IndexOf('/') + 1);
             fileName = fileName.Replace('/', '.');
-            if (false){//if(!File.Exists("results/simple/" + fileName)) {
+            if(File.Exists("results/simple/" + fileName)) {
+                ReadMatrix readMatrix = new ReadMatrix();
+                if (readMatrix.readMatrix("results/simple/" + fileName))
+                {
+                    Console.WriteLine("Getting matrix from file...");
+                    matrix = readMatrix.getMatrix();
+                    rootLinks = readMatrix.getRootLinks();
+                }
             }
             else {
                 Parser parser = new Parser();
