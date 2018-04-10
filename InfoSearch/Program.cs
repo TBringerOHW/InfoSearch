@@ -8,7 +8,7 @@ namespace InfoSearch {
     class Program {
         static void Main(string[] args) {
             String rootLink = "https://elderscrolls.net";
-            int limit = 10;
+            int limit = 100;
 
             int[,] matrix = new int[0, 0];
             List<String> rootLinks;

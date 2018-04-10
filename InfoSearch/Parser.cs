@@ -39,6 +39,7 @@ namespace InfoSearch {
             this.rootLinks = parseLink(rootLink, limit);
             while (rootLinks.Count() < limit)
             {
+                Console.WriteLine(i + ", " + this.rootLinks.ElementAt(i));
                 links = parseLink(this.rootLinks.ElementAt(i), 0);
                 i++;
                 for (int j = 0; j < links.Count() && this.rootLinks.Count() < limit; j++)
@@ -69,21 +70,42 @@ namespace InfoSearch {
                 var doc = getHtmlWeb.Load(rootLink);
                 var aTags = doc.DocumentNode.SelectNodes("//div");
 
-                var urls = aTags.Descendants("a")
-                                   .Select(node => node.GetAttributeValue("href", ""))
-                                   .ToList();
-
-                foreach (string url in urls)
+                if (aTags != null)
                 {
-                    if (limit != 0)
+                    var urls = aTags.Descendants("a")
+                                    .Select(node => node.GetAttributeValue("href", ""))
+                                    .ToList();
+
+                    foreach (string url in urls)
                     {
-                        if (limit == links.Count())
+                        // Console.WriteLine(url + ", " + urls.Count);
+                        if (limit != 0)
                         {
-                            break;
+                            if (limit == links.Count())
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                if (links.Count() < limit && url.Length > 4 && url.Substring(0, 4).Equals("http"))
+                                {
+                                    if (links.Count() == 0)
+                                    {
+                                        links.Add(url);
+                                    }
+                                    else
+                                    {
+                                        if (!checkDuplication(links, url))
+                                        {
+                                            links.Add(url);
+                                        }
+                                    }
+                                }
+                            }
                         }
                         else
                         {
-                            if (links.Count() < limit && url.Length > 4 && url.Substring(0, 4).Equals("http"))
+                            if (url.Length > 4 && url.Substring(0, 4).Equals("http"))
                             {
                                 if (links.Count() == 0)
                                 {
@@ -99,26 +121,11 @@ namespace InfoSearch {
                             }
                         }
                     }
-                    else
-                    {
-                        if (url.Length > 4 && url.Substring(0, 4).Equals("http"))
-                        {
-                            if (links.Count() == 0)
-                            {
-                                links.Add(url);
-                            }
-                            else
-                            {
-                                if (!checkDuplication(links, url))
-                                {
-                                    links.Add(url);
-                                }
-                            }
-                        }
-                    }
                 }
             }
-            catch (IOException) { }
+            catch (IOException e) {
+                Console.WriteLine(e);
+            }
             return links;
         }
 
