@@ -13,18 +13,18 @@ namespace InfoSearch
         {
             String info = "";
 
-            for (int i = 0; i < matrix.Length; i++)
+            for (int i = 0; i < matrix.GetLength(0); i++)
             {
-                for (int j = 0; j < matrix.Length; j++)
+                for (int j = 0; j < matrix.GetLength(1); j++)
                 {
                     info = string.Concat(info, matrix[i, j] + "");
                 }
-                info = string.Concat(info, "\n");
+                info = string.Concat(info, "\r\n");
             }
 
             for (int i = 0; i < rootLinks.Count(); i++)
             {
-                info = string.Concat(info, "\n");
+                info = string.Concat(info, "\r\n");
                 info = string.Concat(info, i + ") " + rootLinks.ElementAt(i));
             }
             
@@ -35,7 +35,9 @@ namespace InfoSearch
                 writer.Flush();
                 writer.Close();
             }
-            catch (IOException) {}
+            catch (IOException e) {
+                Console.WriteLine(e);
+            }
         }
 
     }

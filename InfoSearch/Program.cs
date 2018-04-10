@@ -8,7 +8,7 @@ namespace InfoSearch {
     class Program {
         static void Main(string[] args) {
             String rootLink = "https://elderscrolls.net";
-            int limit = 100;
+            int limit = 10;
 
             int[,] matrix = new int[0, 0];
             List<String> rootLinks;
@@ -27,6 +27,9 @@ namespace InfoSearch {
 
             WriteMatrix writeMatrix = new WriteMatrix();
             writeMatrix.writeMatrix(matrix, rootLinks, fileName);
+
+            Console.WriteLine("Работа завершена");
+            Console.ReadLine();
         }
     }
 }
