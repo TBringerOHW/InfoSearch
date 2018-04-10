@@ -32,6 +32,16 @@ namespace InfoSearch {
                     matrix = readMatrix.getMatrix();
                     rootLinks = readMatrix.getRootLinks();
                 }
+
+                ReadMatrixCoord readMatrixCoord = new ReadMatrixCoord();
+                if (readMatrixCoord.readMatrix("results/coord/" + fileName))
+                {
+                    Console.WriteLine("Getting matrix from file...");
+                    values = readMatrixCoord.getValues();
+                    iIndex = readMatrixCoord.getiIndex();
+                    jIndex = readMatrixCoord.getjIndex();
+                    rootLinks = readMatrixCoord.getRootLinks();
+                }
             }
             else {
                 Parser parser = new Parser();
@@ -47,14 +57,25 @@ namespace InfoSearch {
                 WriteMatrix writeMatrix = new WriteMatrix();
                 writeMatrix.writeMatrix(matrix, rootLinks, "results/simple/" + fileName);
                 Console.WriteLine("Matrix saved to \"{0}\"", "results/simple/" + fileName);
+
+                WriteMatrixCoord writeMatrixCoord = new WriteMatrixCoord();
+                writeMatrixCoord.writeMatrixCoord(values, iIndex, jIndex, rootLinks, "results/coord/" + fileName);
+                Console.WriteLine("Matrix saved to \"{0}\"", "results/coord/" + fileName);
             }           
 
 
             Console.Write("Calculating Page Rank...");
             PageRank rank = new PageRank();
+            PageRankCoord rankCoord = new PageRankCoord();
             Console.WriteLine("Done!\nPage Rank:");
             double[] pageRank = rank.getPageRank(matrix);
+            double[] pageRankCoord = rankCoord.getPageRankCoord(values, iIndex, jIndex, limit);
             foreach(double item in pageRank) {
+                Console.Write(" {0}", item.ToString("0.000000", System.Globalization.CultureInfo.InvariantCulture));
+            }
+            Console.WriteLine();
+            foreach (double item in pageRankCoord)
+            {
                 Console.Write(" {0}", item.ToString("0.000000", System.Globalization.CultureInfo.InvariantCulture));
             }
 
