@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="PageRank.cs" />
     <Compile Include="PageRankCoord.cs" />
+    <Compile Include="ParallelWorker.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -22,6 +22,8 @@ namespace InfoSearch {
 
             Parser parser = new Parser();
 
+            Console.WriteLine("Starting work with matrix size = {0}", limit);
+
             matrix = parser.getMatrix(rootLink, limit);
             rootLinks = parser.getRootLinks();
 
