@@ -198,11 +198,11 @@ namespace InfoSearch {
 
         private void createMatrixParallel() {
             List<ParallelWorker> threads = new List<ParallelWorker>();
-            int thNum = 3;
+            int thAmount = 3;
 
-            for(int i = 0; i < thNum; i++) {
+            for(int i = 0; i < thAmount; i++) {
                 List<string> tempLinks = rootLinks;
-                ParallelWorker worker = new ParallelWorker(tempLinks.GetRange(i * thNum, tempLinks.Count / thNum), thNum, this);
+                ParallelWorker worker = new ParallelWorker(tempLinks.GetRange(i * thAmount, tempLinks.Count / thAmount), i, thAmount, this);
                 threads.Add(worker);
             }
             foreach(ParallelWorker th in threads) {
@@ -227,12 +227,15 @@ namespace InfoSearch {
             Console.WriteLine("====  ====   ====");
         }
 
-        public void FillMatrix(int[,] newMatrixPart, int thNum) {
-            
-            for(int i = 0; i < thNum; i++) {
-                for(int j = 0; j < thNum; j++) {
-                    matrix[i * thNum, j * thNum] = newMatrixPart[i, j];
+        public void FillMatrix(int[,] newMatrixPart, int thNum, int thAmount) {
+            int ii = 0, jj = 0;
+            for(int i = thNum * thAmount; i < thNum * thAmount + thAmount + 1; i++) {
+
+                for(int j = thNum * thAmount; j < thNum * thAmount + thAmount + 1; j++) {
+                    matrix[i, j] = newMatrixPart[ii, jj];
+                    jj++;
                 }
+                ii++;
             }
         }
 

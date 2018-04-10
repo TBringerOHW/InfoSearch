@@ -10,13 +10,14 @@ namespace InfoSearch {
         private List<String> rootLinks;
         List<int> result = new List<int>();
         int[,] matrix;
-        private int thAmount;
+        private int thAmount, thNum;
         Thread th;
         Parser parent;
 
-        public ParallelWorker(List<String> links, int i, Parser parent) {
+        public ParallelWorker(List<String> links, int i, int thAmount, Parser parent) {
             this.rootLinks = links;
             this.thAmount = i;
+            this.thNum = thAmount;
             this.parent = parent;
         }
 
@@ -48,7 +49,7 @@ namespace InfoSearch {
 
                 }
             }
-            parent.FillMatrix(matrix, thAmount);
+            parent.FillMatrix(matrix, thNum, thAmount);
         }
     }
 }
