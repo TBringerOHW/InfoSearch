@@ -30,7 +30,7 @@ namespace InfoSearch
             
             try
             {
-                StreamWriter writer = new StreamWriter("results/simple/" + fileName);
+                StreamWriter writer = new StreamWriter(fileName);
                 writer.Write(info);
                 writer.Flush();
                 writer.Close();

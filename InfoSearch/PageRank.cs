@@ -7,40 +7,39 @@ using System.Threading.Tasks;
 namespace InfoSearch {
     class PageRank {
         private static readonly double DIFFERENCE = 1.0e-4, ATTENUATION_COEF = 0.85;
-        private int[][] matrix;
+        private int[,] matrix;
         private int[] sumLinks;
         private int length;
         //decimal df = new decimal("#.###");
 
-        public double[] getPageRank(int[][] matrix) {
-            length = matrix.Length;
+        public double[] getPageRank(int[,] matrix) {
+            length = matrix.GetLength(1);
             this.matrix = matrix;
-            double[] pageRankOld = new double[this.length];
-            double[] pageRank = new double[this.length];
+            double[] pageRankOld = new double[length];
+            double[] pageRank = new double[length];
             bool stop;
             //this.df.setRoundingMode(RoundingMode.HALF_UP);
             double sum;
 
             getSumLinks();
 
-            for(int i = 0; i < this.length; i++) {
+            for(int i = 0; i < length; i++) {
                 pageRankOld[i] = 1;
             }
 
             do {
-                for(int j = 0; j < this.length; j++) {
+                for(int j = 0; j < length; j++) {
                     sum = 0;
                     pageRank[j] = 1 - ATTENUATION_COEF;
-                    for(int i = 0; i < this.length; i++) {
-                        if(this.matrix[i][j] > 0 && this.sumLinks[i] != 0) {
-                            sum += pageRankOld[i] / this.sumLinks[i];
+                    for(int i = 0; i < length; i++) {
+                        if(this.matrix[i,j] > 0 && sumLinks[i] != 0) {
+                            sum += pageRankOld[i] / sumLinks[i];
                         }
                         else {
                             sum += 0;
                         }
                     }
-                    pageRank[j] += ATTENUATION_COEF * sum;
-                    //pageRank[j] += Double.valueOf(df.format(ATTENUATION_COEF * sum).replace(',', '.'));
+                    pageRank[j] +=  ATTENUATION_COEF * sum;
                 }
 
                 stop = checkStop(pageRankOld, pageRank);
@@ -72,7 +71,7 @@ namespace InfoSearch {
 
             for(int i = 0; i < length; i++) {
                 for(int j = 0; j < length; j++) {
-                    sumLinks[i] += matrix[i][j];
+                    sumLinks[i] += matrix[i,j];
                 }
             }
         }

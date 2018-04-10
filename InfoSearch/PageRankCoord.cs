@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 namespace InfoSearch {
     class PageRankCoord {
         
-        private static readonly double DIFFERENCE = 1.0e-4;
-        private static readonly double ATTENUATION_COEF = 0.85;
+        private static readonly double DIFFERENCE = 1.0e-4, ATTENUATION_COEF = 0.85;
         private List<int> values;
         List<int> iIndex, jIndex;
         private int[] sumLinks;
@@ -45,7 +44,6 @@ namespace InfoSearch {
                         }
                     }
                     pageRank[j] += ATTENUATION_COEF * sum;
-                    //pageRank[j] += Double.valueOf(df.format(this.ATTENUATION_COEF * sum).replace(',', '.'));
                 }
 
                 stop = checkStop(pageRankOld, pageRank);

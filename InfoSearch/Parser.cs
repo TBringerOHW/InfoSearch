@@ -22,10 +22,16 @@ namespace InfoSearch {
             matrix = new int[limit, limit];
             matrixRunnable = new int[limit, limit];
 
-            Console.WriteLine("Creating root links...");
+            Console.Write("Creating root links...");
             createRootLinks(rootLink, limit);
+            Console.WriteLine("Done!");
             Console.WriteLine("Creating matrix...");
+            DateTime startTime = DateTime.Now;
             createMatrix();
+            DateTime stopTime = DateTime.Now;
+            Console.WriteLine("Done!");
+            PrintMatrix();
+            Console.WriteLine("Matrix time = {0}sec {1}ms",(stopTime - startTime).Seconds.ToString(), (stopTime - startTime).Milliseconds.ToString());
             // createMatrixRunnable();
 
 
@@ -38,8 +44,6 @@ namespace InfoSearch {
             bool isUnique = true;
             rootLinks = parseLink(rootLink, limit);
             while(rootLinks.Count() < limit) {
-
-                Console.WriteLine("Link #{0} = {1}", i, rootLinks.ElementAt(i));
 
                 links = parseLink(rootLinks.ElementAt(i), 0);
                 i++;
@@ -67,9 +71,7 @@ namespace InfoSearch {
         }
 
         public List<String> parseLink(String rootLink, int limit) {
-            List<String> links = new List<String>();
-            
-            Console.WriteLine("Parsing link \"{0}\"", rootLink);
+            List<String> links = new List<String>();           
 
             
             List<string> urlsGlobal = new List<string>();
@@ -161,6 +163,7 @@ namespace InfoSearch {
             List<String> links;
             for(int i = 0; i < rootLinks.Count; i++) {
 
+                Console.WriteLine("Parsing link #{0} = \"{1}\"", i+1, rootLinks[i]);
                 links = parseLink(rootLinks[i], 0);
                 for(int j = 0; j < rootLinks.Count; j++) {
 
@@ -176,12 +179,6 @@ namespace InfoSearch {
 
                 }
             }
-
-            DateTime stopTime = DateTime.Now;
-            
-            PrintMatrix();            
-
-            Console.WriteLine("Basic: " + (stopTime - startTime).Seconds.ToString() + " seconds");
         }
 
         public void PrintMatrix() {
