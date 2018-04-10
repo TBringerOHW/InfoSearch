@@ -27,7 +27,7 @@ namespace InfoSearch {
             if (false){//if(!File.Exists("results/simple/" + fileName)) {
             }
             else {
-                Parser parser = new Parser();
+                Parser parser = new Parser(); 
 
                 Console.WriteLine("Starting work with matrix size = {0}", limit);
 
