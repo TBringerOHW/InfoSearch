@@ -13,6 +13,16 @@ namespace InfoSearch {
         private int[,] matrix;
         private int[,] matrixRunnable;
 
+        // for coordinate method
+        private List<int> values = new List<int>();
+        private List<int> iIndex = new List<int>();
+        private List<int> jIndex = new List<int>();
+
+        // for coordinate method
+        private List<int> valuesRunnable = new List<int>();
+        private List<int> iIndexRunnable = new List<int>();
+        private List<int> jIndexRunnable = new List<int>();
+
 
         public List<String> getRootLinks() {
             return rootLinks;
@@ -25,13 +35,12 @@ namespace InfoSearch {
             Console.Write("Creating root links...");
             createRootLinks(rootLink, limit);
             Console.WriteLine("Done!");
-            Console.WriteLine("Creating matrix...");
             DateTime startTime = DateTime.Now;
             createMatrix();
             DateTime stopTime = DateTime.Now;
-            Console.WriteLine("Done!");
+            Console.WriteLine("Creating matrix...Done!");
             PrintMatrix();
-            Console.WriteLine("Matrix time = {0}sec {1}ms",(stopTime - startTime).Seconds.ToString(), (stopTime - startTime).Milliseconds.ToString());
+            Console.WriteLine("Matrix time = {0}sec {1}ms", (stopTime - startTime).Seconds.ToString(), (stopTime - startTime).Milliseconds.ToString());
             // createMatrixRunnable();
 
 
@@ -67,13 +76,13 @@ namespace InfoSearch {
                 }
             }
 
-            
+
         }
 
         public List<String> parseLink(String rootLink, int limit) {
-            List<String> links = new List<String>();           
+            List<String> links = new List<String>();
 
-            
+
             List<string> urlsGlobal = new List<string>();
             try {
                 DateTime startTime = DateTime.Now;
@@ -86,7 +95,7 @@ namespace InfoSearch {
                                     .Select(node => node.GetAttributeValue("href", ""))
                                     .ToList();
                     urlsGlobal = urls;
-                    
+
                     foreach(string url in urls) {
                         //DateTime sTime = DateTime.Now;
                         if(limit != 0) {//If processing rootlink
@@ -96,9 +105,9 @@ namespace InfoSearch {
                             }
                             else {
 
-                                if( (links.Count() < limit) && (url.Length > 4) && (url.Substring(0, 4).Equals("http") ) ) {
+                                if((links.Count() < limit) && (url.Length > 4) && (url.Substring(0, 4).Equals("http"))) {
 
-                                    if(links.Count() == 0) {                                        
+                                    if(links.Count() == 0) {
                                         links.Add(url);
                                     }
                                     else {
@@ -115,18 +124,18 @@ namespace InfoSearch {
                             }
                         }
                         else {
-                           
-                            if( (url.Length > 4)  ) {
+
+                            if((url.Length > 4)) {
 
                                 if(links.Count() == 0) {
                                     links.Add(url);
                                 }
                                 else {
-                                    
+
                                     if(!links.Contains(url)) {
                                         links.Add(url);
                                     }
-                                    
+
                                     //if(!checkDuplication(links, url)) {
                                     //    links.Add(url);
                                     //}
@@ -140,9 +149,12 @@ namespace InfoSearch {
                 }
             }
             catch(IOException e) {
-                Console.WriteLine(e);
+                //Console.WriteLine(e);
             }
-            
+            catch(System.ArgumentException e) {
+                //Console.WriteLine(e);
+            }
+
 
             return links;
         }
@@ -158,12 +170,10 @@ namespace InfoSearch {
 
         private void createMatrix() {
 
-            DateTime startTime = DateTime.Now;
-
             List<String> links;
             for(int i = 0; i < rootLinks.Count; i++) {
 
-                Console.WriteLine("Parsing link #{0} = \"{1}\"", i+1, rootLinks[i]);
+                Console.WriteLine("Parsing link #{0} = \"{1}\"", i + 1, rootLinks[i]);
                 links = parseLink(rootLinks[i], 0);
                 for(int j = 0; j < rootLinks.Count; j++) {
 
@@ -181,15 +191,26 @@ namespace InfoSearch {
             }
         }
 
+        private void createMatrixParallel() {
+            List<ParallelWorker> threads = new List<ParallelWorker>();
+            int thNum = 4;
+
+            for(int i = 0; i < thNum; i++) {
+                List<string> tempLinks = rootLinks;
+                ParallelWorker worker = new ParallelWorker(tempLinks.GetRange(i * thNum, tempLinks.Count / thNum), thNum);
+            }
+
+        }
+
         public void PrintMatrix() {
 
             int i = 0;
             Console.WriteLine("====  ====   ====");
             foreach(int item in matrix) {
-                
+
                 Console.Write(item + " ");
                 i++;
-                if (i == Math.Sqrt(matrix.Length) ) {
+                if(i == Math.Sqrt(matrix.Length)) {
                     i = 0;
                     Console.WriteLine();
                 }
@@ -197,46 +218,18 @@ namespace InfoSearch {
             Console.WriteLine("====  ====   ====");
         }
 
-       /* private void createMatrixParallel() {
-            DateTime startTime = DateTime.Now;
 
-            List<String> links;
-            //ExecutorService executor = Executors.newFixedThreadPool(5);
+        public List<int> getValues() {
+            return values;
+        }
 
-            List<ThreadStart> threadDelegates = new List<ThreadStart>();
-            //List<Future<ArrayList<Integer>>> future;
+        public List<int> getiIndex() {
+            return iIndex;
+        }
 
-            List<IterativeRun> tasks = new ArrayList<>();
-
-            for(int i = 0; i < rootLinks.Count(); i++) {
-                tasks.add(new IterativeRun(rootLinks, i));
-            }
-
-            try {
-                future = executor.invokeAll(tasks);
-                for(int i = 0; i < rootLinks.size(); i++) {
-                    for(int k = 0; k < rootLinks.size(); k++) {
-                        matrixRunnable[i][k] = future.get(i).get().get(k);
-                        this.valuesRunnable.add(1);
-                        this.iIndexRunnable.add(i);
-                        this.jIndexRunnable.add(k);
-                    }
-                }
-            }
-            catch(InterruptedException e) {
-                e.printStackTrace();
-            }
-            catch(ExecutionException e) {
-                e.printStackTrace();
-            }
-            finally {
-                executor.shutdown();
-            }
-
-            DateTime stopTime = DateTime.Now;
-
-            System.out.println("Runnable: " + ((stopTime - startTime) / 1000) + "c");
-        }*/
+        public List<int> getjIndex() {
+            return jIndex;
+        }
 
     }
 }

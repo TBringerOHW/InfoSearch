@@ -3,34 +3,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace InfoSearch {
     class Program {
         static void Main(string[] args) {
-            String rootLink = "https://elderscrolls.net";
-            int limit = 4;
-
+            String rootLink = "https://ya.ru";
+            int limit = 100;
             int[,] matrix = new int[0,0];
             List<String> rootLinks;
             double[] pageRankMatrix = new double[limit];
             double[] pageRankMatrixCoord = new double[limit];
 
+            // for coordinate method
+            List<int> values = new List<int>();
+            List<int> iIndex = new List<int>();
+            List<int> jIndex = new List<int>();
+
             int index = rootLink.LastIndexOf("//");
             String fileName = rootLink.Substring(index + 1) + ".txt";
             fileName = fileName.Substring(fileName.IndexOf('/') + 1);
             fileName = fileName.Replace('/', '.');
+            if (false){//if(!File.Exists("results/simple/" + fileName)) {
+            }
+            else {
+                Parser parser = new Parser();
 
-            Parser parser = new Parser();
+                Console.WriteLine("Starting work with matrix size = {0}", limit);
 
-            Console.WriteLine("Starting work with matrix size = {0}", limit);
+                matrix = parser.getMatrix(rootLink, limit);
+                rootLinks = parser.getRootLinks();
+                values = parser.getValues();
+                iIndex = parser.getiIndex();
+                jIndex = parser.getjIndex();
 
-            matrix = parser.getMatrix(rootLink, limit);
-            rootLinks = parser.getRootLinks();
+                WriteMatrix writeMatrix = new WriteMatrix();
+                writeMatrix.writeMatrix(matrix, rootLinks, "results/simple/" + fileName);
+                Console.WriteLine("Matrix saved to \"{0}\"", "results/simple/" + fileName);
+            }           
 
-            WriteMatrix writeMatrix = new WriteMatrix();
-            writeMatrix.writeMatrix(matrix, rootLinks, "results/simple/" + fileName);
-
-            Console.WriteLine("Matrix writed to \"{0}\"", "results/simple/" + fileName);
 
             Console.Write("Calculating Page Rank...");
             PageRank rank = new PageRank();
