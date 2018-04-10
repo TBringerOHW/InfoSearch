@@ -51,7 +51,10 @@
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadMatrix.cs" />
+    <Compile Include="ReadMatrixCoord.cs" />
     <Compile Include="WriteMatrix.cs" />
+    <Compile Include="WriteMatrixCoord.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

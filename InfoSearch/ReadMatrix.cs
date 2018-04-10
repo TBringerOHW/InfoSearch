@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace InfoSearch
 {
-    class ReadMatrix
+    public class ReadMatrix
     {
         private int[,] matrix;
         private List<String> rootLinks = new List<String>();
